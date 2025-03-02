@@ -1,0 +1,3 @@
+*.safetensors
+*.Identifier
+__pycache__
