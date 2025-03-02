@@ -1,5 +1,7 @@
 
-
+下载模型示例：
+modelscope download --model unsloth/DeepSeek-R1-Distill-Qwen-14B-GGUF DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf --loca
+l_dir ./DeepSeek-R1-Distill-Qwen-14B-Q4
 --------------------------------------对话，推理------------------------------------------
 
 直接调用deepseek_multichat就可以启动模型。
@@ -27,6 +29,8 @@ python vllm_model.py
 cd ~
 conda activate torch_env
 
+pip install vllm
+
 #1.5B
 python -m vllm.entrypoints.openai.api_server \
   --model /root/autodl-tmp/model/DeepSeek-R1 \
@@ -50,3 +54,16 @@ curl http://localhost:8000/v1/chat/completions \
             {"role": "user", "content": "你是什么？<think>\n"}
         ]
     }'
+
+
+--------------------------------------llama.cpp部署与访问------------------------------------------
+wget -c https://github.com/ggml-org/llama.cpp/releases/download/b4798/llama-b4798-bin-ubuntu-x64.zip
+cd /home/zhang/build/bin
+
+#执行如下命令开启服务
+./llama-server     --model /home/zhang/deepseek/DeepSeek-R1-Distill-Qwen-14B-Q4/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf     --port 10000     --ctx-size 1024     --n-gpu-
+layers 40
+
+
+
+curl -X POST -H "Content-Type: application/json" -d '{"prompt": "Hello, how are you?", "max_tokens": 50}' http://127.0.0.1:10000/v1/chat/completions

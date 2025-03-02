@@ -1,3 +1,5 @@
 *.safetensors
 *.Identifier
+*.gguf
+.msc
 __pycache__
